@@ -1,4 +1,4 @@
-# Data Engineering — Take-Home Assessment
+# Data Engineering — Data Take-Home
 
 ## Installation
 
