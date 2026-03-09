@@ -1,0 +1,8 @@
+requests
+psycopg[binary]
+pandas
+numpy
+scispacy
+spacy
+dbt-core
+dbt-postgres
