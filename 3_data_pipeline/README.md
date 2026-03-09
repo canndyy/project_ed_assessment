@@ -18,15 +18,15 @@ Please provide brief written answers to these questions:
 
 #### C1. If this pipeline ran daily in production and one morning the source data file didn't arrive, how would you detect this? What would happen to the downstream tables?
 
-To detect if the source data file has not arrived, I would implement a source freshness check pipeline. (In my pipeline the dbt macro `test_source_freshness`.)
+To detect if the source data file has not arrived, I would implement a source freshness test pipeline. (In my pipeline the dbt macro `test_source_freshness`.)
 
 After each pipeline run, an audit table would store the maximum activity datetime for each key tables such as encounters, conditions, medications, and observations.
 
 During the next pipeline run, the maximum activity datetime from the newly arrived source file would be compared with the value stored in the audit table. Since new records are expected to contain activity timestamps later than those from the previous run, a failure to observe a newer timestamp would indicate that the source data has not been updated or that the file did not arrive. Automated alerts could then notify data warehouse developers to investigate the issue.
 
-In dbt, `dbt source freshness` can also be used to check data freshness.
+If the source file is a flat file that arrives to a directory daily, I would also implement a pipeline that can extract the source file's metadata about last creation date / last modified date, and check it against the an audit table that stores the metadata of the file from the previous day. A change in the file's last creation date / last modified date suggests that the files have been replaced. (eg. using `python os.stat()`)
 
-If the source file does not arrive, the downstream pipeline should not proceed as it could lead to the compiling of incomplete data in downstream tables.
+If the source file did not arrive, the downstream pipeline should not proceed as it could lead to the compiling of incomplete data in downstream tables.
 
 #### C2. Describe one way you would detect a silent failure — where the pipeline completes successfully but the output data is wrong. Give a concrete example relevant to this dataset.
 
@@ -34,3 +34,5 @@ A silent failure can occur when source tables arrive but they are empty without 
 The pipeline would still run successfully, but the output tables would be empty or incomplete.
 
 To detect this, I would implement pre-process tests to ensure all the source tables contain data (row counts > 0) and all source has fresh data before the pipeline starts. (In my pipeline the dbt macro `test_row_count_not_zero`.)
+
+For example, if encounter.csv arrives with only the column headers with no data, it will still be able to process the whole pipeline, but the end-products would be empty tables. It is almost impossible for am operating ED department to not have any new encounters each day, and this silent failure would cause the output data to be incorrect. 
