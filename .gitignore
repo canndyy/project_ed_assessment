@@ -1,0 +1,7 @@
+.env
+.envrc
+.python-version
+**/logs/
+**/target/
+**/.ipynb_checkpoints/
+.DS_Store
