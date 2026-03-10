@@ -128,19 +128,28 @@
 5) In encounters where presentating condition information cannot be found, label null reason code/ desc as 'Not Specified', include in downstream analysis.
 6) For the first question, include a total count by presenting condition column in addition to the average LOS, this can raise awareness of the data completeness.
 
-#### 4. Each reason code has multiple different description but similar meaning.
+#### 4. Some encounter codes can be mapped to multiple different descriptions but of similar meaning.
 
 ##### Issue:
 
-- Reason codes are snomed ct codes. Each SNOMED CT code can have a fully specified name (FSN), and multiple preferred descriptions. The reason description field contains a mixture of FSNs and preferred descriptions. If left undealt with, any aggregation analysis using the description field will result in multiple categories that actually represent the same concept.
+- Codes are snomed ct codes. Each SNOMED CT code can have a fully specified name (FSN), and multiple preferred descriptions. The description field contains a mixture of FSNs and preferred descriptions. If left undealt with, any aggregation analysis using the description field will result in multiple categories that actually represent the same concept.
 
-**Blocking to downstream analysis**
-For the first question, calculating the LOS is an aggregation analysis, if the data is aggregated by reason description field, it will result in multiple categories that actually represent the same concept.
+**Non-Blocking to downstream analysis**
+
+EDA reveals that the code and description fields describe the administrative reason of admission rather then presenting conditions (eg. follow up vist). These fields are not required for the analysis pipeline, hence not blocking to downstream analysis.
+
+This problem is not observed in the reason code and description field, however, since data changes over time, it is reasonable to apply a data standardising approach to these fields to ensure pipeline reproducibility.
 
 ##### Approach:
 
+For code and description fields:
+
+1) Exclude the code and description columns in the pipeline.
+
+For reason code and reason description fields:
+
 1) Perform aggregation analysis using the reason code only.
-2) At the last of the pipeline, join the reason code to a snomed ct dictionary, to ensure only one code is matched to one description.
+2) At the last step of the pipeline, join the reason code to a standard snomed ct dictionary, to ensure only one code is matched to one description.
 3) If a standard dictionary table is not available, create a dimension table with 1:1 code-description mapping, using the available reason codes and description in the dataset.
 
 ## B2. The file encounters_schema_change_batch.csv has a different schema. How would you unify this with the main encounters data?
