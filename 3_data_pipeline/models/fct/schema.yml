@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_encounters_ed_all
+    tests:
+      - start_before_end:
+          arguments:
+            column_start: enc_start_dt
+            column_end: enc_end_dt
+    columns:
+      - name: encntr_id
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_encounter_condition_relation
+    columns:
+      - name: encntr_id
+        tests:
+          - not_null
+      - name: con_snomed_cd
+        tests:
+          - not_null
+
+

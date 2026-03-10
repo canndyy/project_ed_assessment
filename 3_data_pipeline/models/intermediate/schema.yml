@@ -1,0 +1,52 @@
+
+version: 2
+
+models:
+  - name: int_encounters_ed
+    tests:
+      - start_before_end:
+          arguments:
+            column_start: enc_start_dt
+            column_end: enc_end_dt
+    columns:
+      - name: encntr_id
+        tests:
+          - not_null
+      - name: enc_start_dt
+        tests:
+          - not_null
+          - date_not_in_future
+      - name: enc_end_dt
+        tests:
+          - date_not_in_future
+
+  - name: int_encounters_ed_distinct_schema_change
+    tests:
+      - start_before_end:
+          arguments:
+            column_start: enc_start_dt
+            column_end: enc_end_dt
+    columns:
+      - name: encntr_id
+        tests:
+          - not_null
+      - name: enc_start_dt
+        tests:
+          - not_null
+          - date_not_in_future
+      - name: enc_end_dt
+        tests:
+          - date_not_in_future
+
+  - name: int_conditions_from_encounters_ed
+    columns:
+      - name: encntr_id
+        tests:
+          - not_null
+      - name: con_snomed_cd
+        tests:
+          - not_null
+
+  - name: int_encounters_ed_dqflagged
+  - name: int_patients_dqflagged
+  - name: int_conditions_dqflagged
