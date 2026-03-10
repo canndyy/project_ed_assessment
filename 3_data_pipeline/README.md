@@ -14,6 +14,8 @@ Analyst-ready outputs:
 - Frequent Attenders: mart_12m_frequent_ed_attenders
 ```
 
+Although urgent care and ambulatory emergency care are now part of the NHS Emergency Care Data Set V4 required activites, in the context of this dataset, ED encounters are assumed to refer to emergency encounter only.
+
 Please provide brief written answers to these questions:
 
 #### C1. If this pipeline ran daily in production and one morning the source data file didn't arrive, how would you detect this? What would happen to the downstream tables?
@@ -35,4 +37,4 @@ The pipeline would still run successfully, but the output tables would be empty 
 
 To detect this, I would implement pre-process tests to ensure all the source tables contain data (row counts > 0) and all source has fresh data before the pipeline starts. (In my pipeline the dbt macro `test_row_count_not_zero`.)
 
-For example, if encounter.csv arrives with only the column headers with no data, it will still be able to process the whole pipeline, but the end-products would be empty tables. It is almost impossible for am operating ED department to not have any new encounters each day, and this silent failure would cause the output data to be incorrect. 
+For example, if encounter.csv arrives with only the column headers with no data, it will still be able to process the whole pipeline, but the end-products would be empty tables. It is almost impossible for am operating ED department to not have any new encounters each day, and this silent failure would cause the output data to be incorrect.
