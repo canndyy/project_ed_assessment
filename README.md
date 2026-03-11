@@ -1,8 +1,15 @@
-# Data Engineering — Data Take-Home
+# Data Engineering — Data Take Home Exercise
+
+You are a data engineer at an NHS hospital that has recently migrated from a legacy EHR system to a new system. During the migration, historical data has been extracted as CSV files. You have been asked to build a data pipeline that produces analyst-ready data for the Emergency Department (ED) clinical team. Your line manager has asked you to implement a Extract Load Transform (ELT) approach.
+
+The ED clinical lead wants to answer two questions:
+
+What is the average length of stay for ED encounters per presenting condition?
+Which patients are frequent ED attenders (3+ visits in 12 months)?
 
 ## Installation
 
-1. Ensure you have python 3.10 and pip package manager installed.
+1. Ensure you have python 3.10 and pip package manager installed. (Python 3.11 is not compatible with some of the packages)
 2. Installed the required packages for all the tasks in `requirements.txt`, and run the following command in terminal.
 
 ```

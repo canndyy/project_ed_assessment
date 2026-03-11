@@ -154,28 +154,36 @@ For reason code and reason description fields:
 
 ## B2. The file encounters_schema_change_batch.csv has a different schema. How would you unify this with the main encounters data?
 
-1) First perform data modelling to compare difference in schema.
+1) Investigate difference in schema and data types.
 
     Difference:
-    - column name: encounterclass changed from encounterclass to encounter_type, the unique values of both columns are the same
-    - data type: start and stop columns changed from utc timestamp to unix seconds timestamp
-    - column headers: extra column present to indicate source systems
+    - column names: column encounterclass changed to encounter_type, but the unique values in both columns are the same
+    - data types: both datasets have different timestamp format (one in utc and the other in unix seconds)
+    - columns: extra column present to indicate source systems in encounters_schema_change_batch.csv, otherwise all other columns align.
 
-2) Convert start and stop columns to timestamp format. However, it was unknown whether the timestamp was in UTC format or not, this would need to be confirmed with database documentation if available.
+2) Standardise data types.
+  Convert start and stop columns to timestamp format. However, it was unknown whether the timestamp was in UTC format or not, this would need to be confirmed with system documentation if available.
 
-3) Convert column name ENCOUNTER_TYPE to ENCOUNTERCLASS, to match with that in encounter.csv
+3) Standardise column names.
+  Convert column name ENCOUNTER_TYPE to ENCOUNTERCLASS, to match with that in encounter.csv
 
-4) The approach to unify the data depends on whether the systems share the same indexing system for generation of uuids (Universally Unique Identifier) for encounter, patient, origaniztion, payer.
+4) Investigate the level of uniqueness of identifiers
+  Need to determine if the the source systems share the same identifier system for encounter, patient, origaniztion, payer. (if ids are unique across all systems or only within each system)
 
-  **If UUIDs share the same master index**
+  If UUIDs are globally unique across all system, it means that each matching encounter id from the 2 datasets refers to the same encounter. This could be validated by compaing the data fields from the datasets.
 
-    1) Join the 2 encounter tables by id and patient
-    2) Identify records in the schenma_change table not present in the encounter table, then append to the encounter table.
-    3) Replace any missing data from the encounters table with data from the schema_change table. However, any inconsistent data (start and stop columns) would need further investigation.
-        - The start and stop timestamp are in UTC format but not specified in the schema_change table. The timestamps in the schema_change table is always 1 hour behind that of the encounter table in summer time, which is logically implausible for any time zones.
+  1) The 2 tables can be joined by encounter id.
+  2) Merge the datasets to reconcile any missing / incomplete fields.
+    Before merging, any inconsistent data would need further investigation.
+    Noted the start and stop timestamp are in UTC format but not specified in the schema_change table. The timestamps in the schema_change table is always 1 hour behind that of the encounter table in summer time, which is logically implausible for any time zones.
+  3) Records in encounters_schema_change_batch.csv not present in the main encounter table will  be appended (or union joined) to the encounter table.
+  4) Keep the column that indicates the source system.
 
-  **If UUIDs do not share the same master index**
+  If UUIDs are only unique in each system, it is not possible to use the uuids only to determine whether the encounters in the schema_change table are the same to that in the encounters table even if the uuids are the same.
 
-    1) Not possible to conclude whether the encounters in the schema_change table corresponds to that in the encounters table. (even if the uuids are the same)
-    2) To unify the 2 tables, I would add a suffix to the encounters in the schema_change table using the source_system column (eg. 509c21e2-80e9-4fc7-8279-3137abd0eff6_cerner).
-    3) Then I would append the data to the encounters table as new rows.
+  1) Check if a separate master index table is available (more commonly seen for patient / organisation /payer ids, rare for encounters).
+  2) If a master encounter index table is available, map each source encounter id to the master encounter id, and perform from step 2 onwards as if the uuids are globally unique. All id columns should also be mapped using their respective master index table.
+  3) If master index tables are not available, it is possible to use mapping logic on other encounter data fields to determine if they are duplicates or not. If it is obvious that the fields are identical and the records are duplicates, then proceed to merge, and create a master index table to map the encounters.
+  4) If the records are clearly not identical and can be treated as separate encounters, to unify the 2 tables, I would add a suffix to the ids of every encounter referencing the source system(eg. CERN_509c21e2-80e9-4fc7-8279-3137abd0eff6, MAIN_509c21e2-80e9-4fc7-8279-3137abd0eff6, EPIC_509c21e2-80e9-4fc7-8279-3137abd0eff6) to create unique composite keys. The suffix should be in the same format to maintain data consistency.
+  5) The same processing logic should apply to other id columns as well.
+  3) Lastly I would append (or union join) all the encounters table into one table.
