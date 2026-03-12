@@ -186,4 +186,4 @@ For reason code and reason description fields:
   3) If master index tables are not available, it is possible to use mapping logic on other encounter data fields to determine if they are duplicates or not. If it is obvious that the fields are identical and the records are duplicates, then proceed to merge, and create a master index table to map the encounters.
   4) If the records are clearly not identical and can be treated as separate encounters, to unify the 2 tables, I would add a suffix to the ids of every encounter referencing the source system(eg. CERN_509c21e2-80e9-4fc7-8279-3137abd0eff6, MAIN_509c21e2-80e9-4fc7-8279-3137abd0eff6, EPIC_509c21e2-80e9-4fc7-8279-3137abd0eff6) to create unique composite keys. The suffix should be in the same format to maintain data consistency.
   5) The same processing logic should apply to other id columns as well.
-  3) Lastly I would append (or union join) all the encounters table into one table.
+  6) Lastly I would append (or union join) all the encounters table into one table.
