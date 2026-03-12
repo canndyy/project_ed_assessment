@@ -1,7 +1,6 @@
 import requests
 import psycopg
 import os
-import csv
 
 # define function to load source file in csv format
 
