@@ -1,0 +1,39 @@
+sources:
+  - name: raw_data
+    schema: raw
+    tables:
+      - name: patients
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: encounters
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: encounters_schema_change_batch
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: conditions
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: medications
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: observations
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}
+      - name: clinical_notes
+        tests:
+          - row_count_not_zero
+        freshness:
+          error_after: {count: 24, period: hour}

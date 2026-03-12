@@ -1,0 +1,18 @@
+
+version: 2
+
+models:
+  - name: stg_conditions
+    tests:
+      - source_freshness:
+         arguments:
+          source_max_dt: con_start_dt
+
+  - name: stg_patients
+  - name: stg_medications
+
+  - name: stg_encounters_ed
+    tests:
+      - source_freshness:
+          arguments:
+            source_max_dt: enc_start_dt
