@@ -28,6 +28,7 @@ This script reads the CSV files directly from their source URLs and loads them i
 | observations.csv | raw.observations |
 | clinical_notes.csv | raw.clinical_notes |
 
+raw._raw_load_meta is an audit table that stores the meta data of the source file after each table load.
 
 **Screenshot of database tables schemas from Supabase after import:**
 
