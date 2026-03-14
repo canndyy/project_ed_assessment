@@ -21,5 +21,3 @@ models:
       - name: con_snomed_cd
         tests:
           - not_null
-
-

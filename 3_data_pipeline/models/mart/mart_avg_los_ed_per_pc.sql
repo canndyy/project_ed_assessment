@@ -1,5 +1,7 @@
 {{config(materialized='table')}}
 
+--description: average LOS of ED encounters by conditions
+
 SELECT
 COALESCE(dict.description, 'Not Specified') AS Presenting_Condition,
 COUNT(enc.encntr_id) AS Encounter_Count,

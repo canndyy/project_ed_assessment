@@ -14,7 +14,7 @@ This script reads the CSV files directly from their source URLs and loads them i
 1. Set up your database URL.
 2. Ensure you have python and the pip package manager installed.
 3. Ensure you have installed the required packages in `../requirements.txt`.
-4. Run this command in terminal: `python data_load.py`
+4. Run this command in terminal: `python 1_data_load/data_load.py`
 
 **Corresponding database tables:**
 
@@ -30,4 +30,5 @@ This script reads the CSV files directly from their source URLs and loads them i
 
 
 **Screenshot of database tables schemas from Supabase after import:**
+
 ![Database Table Schema](data_load_schema.png)

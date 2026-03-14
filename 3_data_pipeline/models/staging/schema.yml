@@ -16,3 +16,9 @@ models:
       - source_freshness:
           arguments:
             source_max_dt: enc_start_dt
+
+  - name: stg_encounters_ed_schema_change
+    description: legacy data source of encounters
+
+  - name: _meta_audit
+    description: meta data of the stg tables

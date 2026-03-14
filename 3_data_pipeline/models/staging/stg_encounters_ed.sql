@@ -1,4 +1,4 @@
-{{config(materialized='view', tags=['fresh'])}}
+{{config(materialized='table', tags=['fresh'])}}
 
 {% set ed_stay_threshold = '5 days' %}
 

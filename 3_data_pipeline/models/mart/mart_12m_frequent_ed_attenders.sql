@@ -1,5 +1,7 @@
 {{config(materialized='table')}}
 
+---description: frequent ED attenders (3+) in the last 12 months rolling
+
 with cte as
 (
 SELECT
@@ -15,6 +17,12 @@ SELECT
 fct.patient_id
 ,pt.first_name
 ,pt.last_name
+,pt.birthdate
+,pt.ssn
+,address
+,city
+,state
+,county
 ,encounter_count
 from cte as fct
 LEFT JOIN {{ref('dim_patients')}} pt

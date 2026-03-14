@@ -1,4 +1,4 @@
-{{config(materialized='view', tags=['fresh'])}}
+{{config(materialized='table', tags=['fresh'])}}
 
 SELECT DISTINCT
   encounter::UUID AS encntr_id,

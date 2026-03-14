@@ -6,16 +6,14 @@ data/clinical_notes.csv contains synthetic free-text ED triage notes. Describe (
 
 Primary disorders were extracted from clinical notes using a NLP pipeline built with **SciSpaCy** model `en_ner_bc5cdr_md`, using a combination of rule-based pattern matching and named entity recognition to identify of disease entities in clinical text.
 
-please see workbook `NLP.ipynb` for the pipeline.
+Please see workbook `NLP.ipynb` for the pipeline.
 
 #### Approach
 
-  Rule-based pattern matching was used to detect text patterns typically associated with chief complaints or presentation mentions.
-
-  After text patterns were identified, the biomedical NER model was used to detect entities within the texts.
+Rule-based pattern matching can detect text patterns typically associated with chief complaints or presentation mentions.
+After text patterns were identified, the biomedical NER model was used to detect entities within the texts.
 
 ### Pattern Design
-
 
 **1. Complaint headers followed by disease entities**
 
@@ -90,7 +88,6 @@ DISEASE + punctuation (not ":")
 
 Example:
 asthma.
-seizure.
 
 **8. Short word sequences followed by punctuation (excluding ':')**
 

@@ -1,4 +1,6 @@
+{{config(materialized='view')}}
 
+--description: dq flagged records from stg table, not excluded from pipeline
 
 SELECT
 *
