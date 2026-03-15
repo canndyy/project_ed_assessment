@@ -1,0 +1,49 @@
+name: dbt ci/cd
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  ci_pull:
+    if: github.event_name == 'push'
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dbt
+        run: pip install dbt-core dbt-postgres
+
+      - name: Run models
+        run: cd 3_data_pipeline && dbt run --target dev
+
+      - name: Run tests
+        run: cd 3_data_pipeline && dbt test --target dev
+
+  cd_push:
+    if: github.event_name == 'push'
+    runs-on: macos-latest
+    name: CD - Deploy dbt models to Production
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dbt
+        run: pip install dbt-core dbt-postgres
+
+      - name: Run dbt models
+        run: cd 3_data_pipeline && dbt run --target prod
+
+      - name: Run dbt tests
+        run: cd 3_data_pipeline dbt test --target prod

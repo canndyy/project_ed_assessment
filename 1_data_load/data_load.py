@@ -78,12 +78,12 @@ def data_load_csv(source_data_url:str, load_file:str, target_database_url:str, s
         result = conn.execute(query)
         dw_max_etag = result.scalar()
 
-    if dw_max_etag != raw_load_meta['etag'] and dw_max_etag != None :
-        raise ValueError(f'File has not update.')
+        if dw_max_etag == raw_load_meta['etag']:
+            raise ValueError("File has not update.")
 
-    # load tables and update meta
-    data.to_sql(table_dw,engine,if_exists='replace', index=False, schema=schema) #replace whole table
-    raw_load_meta_df.to_sql("_raw_load_meta",engine,if_exists='append', index=False, schema=schema) #append load record
+        # load tables and update meta
+        data.to_sql(table_dw,engine,if_exists='replace', index=False, schema=schema) #replace whole table
+        raw_load_meta_df.to_sql("_raw_load_meta",engine,if_exists='append', index=False, schema=schema) #append load record
 
     print('----Import Completed----')
 
