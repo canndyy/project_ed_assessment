@@ -74,7 +74,7 @@ def data_load_csv(source_data_url:str, load_file:str, target_database_url:str, s
         .limit(1)
         )
 
-    with engine.connect() as conn:
+    with engine.begin() as conn:
         result = conn.execute(query)
         dw_max_etag = result.scalar()
 
